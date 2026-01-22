@@ -1,0 +1,8 @@
+{
+    "name": "kanasha-plugin",
+    "description": "Plugin with Kanasha AI Agents/Commands",
+    "version": "1.0.0",
+    "author": {
+        "name": "Fernando Kanashiro"
+    }
+}
