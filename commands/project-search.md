@@ -54,7 +54,7 @@ When the user invokes this command with a request:
      - **Relevant Files**: List of key files for implementation
      - **Internet Patterns**: Solutions and best practices found
      - **Recommendation**: Suggested approach prioritizing consistency
-     - **Implementation**: High-level steps for implementation
+     - **Implementation**: Brief list of what needs to be done (no details - the spec command will handle detailed planning)
      - **References**: URLs of all sources consulted
 
 6. **Execution**:
