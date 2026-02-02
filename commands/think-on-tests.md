@@ -4,7 +4,7 @@ Analyzes a given class and generates a comprehensive test plan document with all
 
 ## Objective
 
-Deeply understand a class's responsibilities, behaviors, and edge cases to produce a detailed test case document at `docs/<path/to/the/class>.md`. The document serves as a blueprint the developer validates before any test is written.
+Deeply understand a class's responsibilities, behaviors, and edge cases to produce a detailed test case document at `testsScenarios/<path/to/the/class>.md`. The document serves as a blueprint the developer validates before any test is written.
 
 ## Instructions
 
@@ -66,7 +66,7 @@ When the user invokes this command with a class path:
    - **Priority**: High, Medium, or Low based on risk and importance
 
 5. **Existing Document Check**:
-   - Before writing, check if `docs/<path/to/the/class>.md` already exists
+   - Before writing, check if `testsScenarios/<path/to/the/class>.md` already exists
    - If it exists:
      - Read the current content
      - Compare with the new analysis
@@ -76,7 +76,7 @@ When the user invokes this command with a class path:
    - If it does not exist: create the file with the full test plan
 
 6. **File Generation**:
-   - Path: `docs/<path/to/the/class>.md` (mirroring the class's source path)
+   - Path: `testsScenarios/<path/to/the/class>.md` (mirroring the class's source path)
    - Structure:
      - **Class**: Full class name and source path
      - **Type**: Controller / Service / Repository / Other
