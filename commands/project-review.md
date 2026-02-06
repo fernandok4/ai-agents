@@ -1,4 +1,4 @@
-# Review Command
+# Project Command
 
 Performs comprehensive code review by orchestrating parallel specialist reviewers.
 
