@@ -287,15 +287,18 @@ Here's a typical workflow from idea to implementation:
 **Purpose**: Create or update project documentation.
 
 **What it does**:
-- Analyzes the codebase to understand the topic
-- Creates structured documentation in the `docs/` folder
-- Maintains consistency with existing documentation style
+- Maintains `docs/documentation.md` as the single source of truth
+- Adds or updates content for the requested topic in the main file
+- Only creates additional files when a topic needs extensive detail
+- Links additional files from the main documentation
+
+**Main file**: `docs/documentation.md` — contains project summary and all primary content.
 
 **Example**:
 ```bash
 /product-document authentication module
 /product-document API endpoints
-/product-document getting started guide
+/product-document the entire project
 ```
 
 ---
@@ -428,13 +431,13 @@ Agents are specialized AI assistants that can be invoked automatically or manual
 
 #### Product Documenter
 
-**Purpose**: Create and maintain project documentation.
+**Purpose**: Create and maintain project documentation with a single source of truth.
 
 **Capabilities**:
-- Analyze code to understand functionality
-- Create structured documentation
-- Organize the `docs/` folder hierarchy
-- Maintain documentation consistency
+- Maintain `docs/documentation.md` as the central documentation hub
+- Analyze code to understand and document functionality
+- Add topics to the main file, keeping everything in one place
+- Create additional files only when topics need extensive detail
 
 ---
 
@@ -487,8 +490,8 @@ Agents are specialized AI assistants that can be invoked automatically or manual
 ### Creating Documentation
 
 ```bash
-/product-document API reference
-/product-document architecture overview
+/product-document the entire project
+/product-document authentication module
 ```
 
 ---
