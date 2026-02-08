@@ -303,6 +303,27 @@ Here's a typical workflow from idea to implementation:
 
 ---
 
+#### `/tech-document <topic>`
+
+**Purpose**: Create technical documentation for developers.
+
+**What it does**:
+- Writes documentation for **developers, not business users**
+- Includes code examples, architecture diagrams, and API references
+- Maintains `tech-docs/documentation.md` as the single source of truth
+- Documents setup, configuration, and implementation details
+
+**Audience**: Developers, engineers, technical leads.
+
+**Example**:
+```bash
+/tech-document the entire project
+/tech-document API endpoints
+/tech-document authentication architecture
+```
+
+---
+
 ## Agents
 
 Agents are specialized AI assistants that can be invoked automatically or manually. Each has a specific focus and set of tools.
@@ -443,6 +464,20 @@ Agents are specialized AI assistants that can be invoked automatically or manual
 
 ---
 
+#### Tech Documenter
+
+**Purpose**: Create technical documentation for developers.
+
+**Audience**: Developers, engineers, technical leads—anyone who needs to understand and work with the code.
+
+**Capabilities**:
+- Document architecture, APIs, and code patterns
+- Include code examples with syntax highlighting
+- Create setup and configuration guides
+- Maintain `tech-docs/documentation.md` as the single source of truth
+
+---
+
 ## Typical Workflows
 
 ### New Feature Development
@@ -492,8 +527,12 @@ Agents are specialized AI assistants that can be invoked automatically or manual
 ### Creating Documentation
 
 ```bash
+# For product/business documentation (non-technical)
 /product-document the entire project
-/product-document authentication module
+
+# For technical documentation (developers)
+/tech-document the entire project
+/tech-document API endpoints
 ```
 
 ---
