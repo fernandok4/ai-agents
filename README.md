@@ -284,21 +284,21 @@ Here's a typical workflow from idea to implementation:
 
 #### `/product-document <topic>`
 
-**Purpose**: Create or update project documentation.
+**Purpose**: Create business-focused documentation for non-technical audiences.
 
 **What it does**:
+- Writes documentation for **product people, not developers**
+- Explains what the product does and why it matters (no code or technical jargon)
 - Maintains `docs/documentation.md` as the single source of truth
-- Adds or updates content for the requested topic in the main file
-- Only creates additional files when a topic needs extensive detail
-- Links additional files from the main documentation
+- Translates technical features into business value and user benefits
 
-**Main file**: `docs/documentation.md` — contains project summary and all primary content.
+**Audience**: Product managers, stakeholders, executives, business analysts.
 
 **Example**:
 ```bash
-/product-document authentication module
-/product-document API endpoints
 /product-document the entire project
+/product-document the login experience
+/product-document the payment system
 ```
 
 ---
@@ -431,13 +431,15 @@ Agents are specialized AI assistants that can be invoked automatically or manual
 
 #### Product Documenter
 
-**Purpose**: Create and maintain project documentation with a single source of truth.
+**Purpose**: Create business-focused documentation for non-technical audiences.
+
+**Audience**: Product managers, stakeholders, executives—anyone who thinks about the product, not the code.
 
 **Capabilities**:
-- Maintain `docs/documentation.md` as the central documentation hub
-- Analyze code to understand and document functionality
-- Add topics to the main file, keeping everything in one place
-- Create additional files only when topics need extensive detail
+- Translate technical features into plain language
+- Explain what the product does and why it matters
+- Focus on user value and business outcomes
+- Maintain `docs/documentation.md` as the single source of truth
 
 ---
 
