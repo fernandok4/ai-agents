@@ -1,18 +1,13 @@
 # Spec Command
 
-Creates a detailed implementation specification from `initial-search.md`.
+Creates a detailed implementation specification based on user requirements.
 
 ## Instructions
 
-When the user invokes this command:
-
-1. Use the Task tool to invoke the `spec-architect` agent
-2. The agent will read `initial-search.md` and produce `spec.md` in the current directory
+When the user invokes this command, use the Task tool to invoke the `spec-architect` agent to produce `spec.md`.
 
 ## Usage
 
 ```
 /spec
 ```
-
-Requires `initial-search.md` to exist. Run `/project-search` first if it doesn't.
