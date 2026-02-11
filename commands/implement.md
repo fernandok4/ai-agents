@@ -1,15 +1,13 @@
-# Implement Specification Command
+# Implement Command
 
-Implements a specification file using the implementer agent.
+Implements what the user requests using the implementer agent.
+
+## Instructions
+
+When the user invokes this command, use the Task tool to invoke the `implementer` agent to implement what the user asks.
 
 ## Usage
 
 ```
-/implement [spec-file]
+/implement
 ```
-
-Default: `spec.md` in current directory.
-
-## Instructions
-
-Use the **implementer** subagent to implement the specified file. Pass the spec file path as context.
