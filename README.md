@@ -537,6 +537,21 @@ Agents are specialized AI assistants that can be invoked automatically or manual
 
 ---
 
+## Project Structure
+
+```
+ai-agents/
+├── agents/              # Agent configurations (YAML frontmatter + Markdown)
+├── commands/            # Command wrappers that invoke agents
+├── standards/           # Shared definitions used by all agents
+│   ├── severity-levels.md    # Unified severity definitions
+│   ├── scale-assumptions.md  # Default performance baselines
+│   └── file-conventions.md   # Output locations and file reference format
+└── README.md
+```
+
+---
+
 ## Contributing
 
 Contributions are welcome! Please follow the semantic commit conventions when submitting changes.
