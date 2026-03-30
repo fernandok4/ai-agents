@@ -6,10 +6,11 @@
     "plugins": [
         {
             "name": "kanasha-plugin",
-            "source": {
-                "source": "github",
-                "repo": "fernandok4/ai-agents"
-            }
+            "directory": "plugins/kanasha-plugin"
+        },
+        {
+            "name": "kanasha-frontend-plugin",
+            "directory": "plugins/kanasha-frontend-plugin"
         }
     ]
 }
