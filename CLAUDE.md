@@ -1,5 +1,9 @@
 # AI Agents Plugin
 
+## Git Commits
+
+Never add `Co-Authored-By` lines to commit messages. Do not include Claude as a co-author.
+
 ## Agent Orchestration
 
 When orchestrating multiple agents, always prioritize using `TeamCreate` or `TeamAgent` over launching agents individually with the `Agent` tool. Teams provide better coordination, parallel execution, and structured communication between agents.
