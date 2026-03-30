@@ -6,11 +6,11 @@
     "plugins": [
         {
             "name": "kanasha-plugin",
-            "directory": "plugins/kanasha-plugin"
+            "source": "./plugins/kanasha-plugin"
         },
         {
             "name": "kanasha-frontend-plugin",
-            "directory": "plugins/kanasha-frontend-plugin"
+            "source": "./plugins/kanasha-frontend-plugin"
         }
     ]
 }
