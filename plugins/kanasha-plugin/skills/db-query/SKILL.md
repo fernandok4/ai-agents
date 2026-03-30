@@ -1,6 +1,6 @@
 ---
 name: db-query
-description: Query databases in read-only mode. Use when the user asks to find, check, or look up data in a database. Triggers on phrases like "query the database", "check in the DB", "find in the database", "look up in the table", "SELECT", "show me data from".
+description: Query databases in read-only mode. Use when the user asks to find, check, or look up data in a database. Triggers on phrases like "query the database", "check in the DB", "find in the database", "look up in the table", "SELECT", "show me data from". The database-specialist agent also uses this skill for live queries — prefer delegating to that agent for complex data investigations.
 user-invocable: true
 argument-hint: "<what you want to find>"
 allowed-tools: Read, Bash
