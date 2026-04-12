@@ -11,6 +11,10 @@
         {
             "name": "kanasha-frontend-plugin",
             "source": "./plugins/kanasha-frontend-plugin"
+        },
+        {
+            "name": "kanasha-wiki-plugin",
+            "source": "./plugins/kanasha-wiki-plugin"
         }
     ]
 }
