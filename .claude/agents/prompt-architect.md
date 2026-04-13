@@ -16,7 +16,7 @@ Agent configurations use YAML frontmatter + Markdown body. This is the actual fo
 ---
 name: agent-name
 description: "When to use this agent and what it does"
-tools: Read, Grep, Glob, Write
+tools: Read, Write, Edit, Grep, Glob, Skill
 model: sonnet
 color: blue
 ---
