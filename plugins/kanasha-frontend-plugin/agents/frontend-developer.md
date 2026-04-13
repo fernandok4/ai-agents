@@ -4,6 +4,7 @@ description: "Use this agent when you need to implement frontend functionality f
 model: sonnet
 color: green
 memory: project
+tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch, TodoWrite
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash
 ---
 
