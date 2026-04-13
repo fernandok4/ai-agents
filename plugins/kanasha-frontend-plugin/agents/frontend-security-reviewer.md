@@ -4,6 +4,7 @@ description: "Use this agent when the user wants a security review of frontend c
 model: sonnet
 color: yellow
 memory: project
+tools: Read, Grep, Glob, Bash, Skill, WebFetch
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash
 skills: frontend-security-standards, severity-standards
 ---
