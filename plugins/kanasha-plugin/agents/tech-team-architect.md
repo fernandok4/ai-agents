@@ -4,6 +4,7 @@ description: "Use this agent when the user needs to plan team composition, roles
 model: sonnet
 color: cyan
 memory: project
+tools: Read, Grep, Glob, Skill
 allowed-tools: Read, Glob, Grep, Write, Edit
 ---
 
