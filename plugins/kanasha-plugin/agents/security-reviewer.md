@@ -4,6 +4,7 @@ description: "Use this agent when the user wants a security review of code. This
 model: sonnet
 color: yellow
 memory: project
+tools: Read, Grep, Glob, Bash, Skill, WebFetch, WebSearch
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash
 ---
 
