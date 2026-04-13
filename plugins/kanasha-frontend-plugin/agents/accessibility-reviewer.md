@@ -4,6 +4,7 @@ description: "Use this agent when the user wants an accessibility review of fron
 model: sonnet
 color: magenta
 memory: project
+tools: Read, Grep, Glob, Bash, Skill
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash
 skills: severity-standards
 ---
