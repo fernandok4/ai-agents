@@ -1,13 +1,13 @@
 ---
 name: load-wiki
-description: Load wiki context for development using qmd semantic search. Always loads core patterns (code-patterns, multi-tenancy, database, project-structure, configuration). Dynamically discovers additional pages via intelligent qmd queries based on arguments. Use before any development task.
+description: Load wiki context for development using qmd semantic search. Generates N intelligent query variations of the user's request (scaled by complexity) and loads only the pages qmd ranks as relevant. No hardcoded core — qmd decides what matters for the topic.
 user-invocable: true
 argument-hint: "<description of what you're going to work on>"
 ---
 
 # Load Wiki Context (powered by qmd)
 
-Intelligently loads wiki pages as development context using **qmd** semantic search. Core patterns are ALWAYS loaded. Additional pages are discovered dynamically through multiple intelligent queries based on what the user describes.
+Load wiki pages as development context using **qmd** semantic search. No files are loaded blindly — every page read is one that qmd ranked as relevant to N intelligent variations of the user's request.
 
 ## Prerequisites
 
@@ -16,92 +16,112 @@ Intelligently loads wiki pages as development context using **qmd** semantic sea
 
 ## Instructions
 
-When invoked, follow these steps:
+### Step 1 — Read the user's request carefully
 
-### Step 1 — Always load core patterns
+Understand what the user is about to do. Key axes to identify:
 
-Read ALL of these files (they are mandatory for any development):
+- **Scope**: single file? one feature? cross-service flow? architecture change?
+- **Stack**: backend (Kotlin/Quarkus), frontend (Flutter), infra, docs portal?
+- **Nature**: implementation, debugging, exploration/question, refactor?
+- **Implicit concerns**: does it touch auth? multi-tenancy? persistence? messaging? UI state?
 
-1. `wiki/pages/overview/platform-overview.md`
-2. `wiki/pages/architecture/project-structure.md`
-3. `wiki/pages/architecture/code-patterns.md`
-4. `wiki/pages/architecture/configuration-patterns.md`
-5. `wiki/pages/data/database-patterns.md`
-6. `wiki/pages/data/multi-tenancy.md`
+If no arguments are provided, skip to Step 4 and report nothing was loaded.
 
-### Step 2 — Intelligent dynamic search with qmd
+### Step 2 — Generate N query variations
 
-If the user provides arguments describing what they're going to work on, perform **multiple qmd queries** to discover all relevant wiki pages. The goal is to be thorough — cast a wide net with diverse queries.
+Produce **multiple diverse query variations** covering every angle the request might touch. The goal is coverage: better to run one extra query than to miss a relevant page.
 
-#### How to generate queries
+**How to scale N to request complexity:**
 
-Analyze the user's description and decompose it into multiple search angles:
+| Request type | Suggested N |
+|---|---|
+| Narrow/specific ("como a tela de login valida email?") | 3–4 queries |
+| Feature implementation ("criar endpoint X no serviço Y") | 5–7 queries |
+| Cross-service flow ("implementar fluxo de pagamento ponta a ponta") | 8–10 queries |
+| Architecture/exploratory ("como o frontend é organizado?", "explica a arquitetura multi-tenant") | 6–9 queries |
+| Refactor / migration / large change | 10–12 queries |
 
-1. **Service-level query**: Which service(s) are involved?
-   - Example: user says "SMS provider" → query for "communication service SMS"
-2. **Endpoint-level query**: Which API endpoints might be relevant?
-   - Example: user says "create user" → query for "create user endpoint API"
-3. **Pattern-level query**: Which architectural patterns apply?
-   - Example: user says "new entity" → query for "entity pattern repository service"
-4. **Security query**: Does the task touch auth, encryption, or roles?
-   - Example: user says "login flow" → query for "JWT authentication token security"
-5. **Flow query**: Is there a cross-service flow involved?
-   - Example: user says "registration" → query for "user registration flow"
-6. **Data query**: Does it involve database, migrations, or multi-tenancy?
-   - Example: user says "new table" → query for "Flyway migration database naming"
-7. **Infrastructure query**: Does it involve gateway, messaging, or config?
-   - Example: user says "events" → query for "RabbitMQ messaging exchange routing"
-8. **Frontend query**: Does it involve UI, Flutter, or navigation?
-   - Example: user says "profile screen" → query for "Flutter navigation state management"
+**Diversity heuristics — vary the queries across these axes (pick the ones that apply):**
 
-#### How to execute queries
+1. **Direct rephrasing** — the user's own words, cleaned up
+2. **Synonym/alternate terms** — e.g., "tela" → "screen", "auth" → "JWT token security"
+3. **Service/component name** — name the likely service(s) explicitly
+4. **Layer/pattern** — "repository pattern", "BLoC state management", "Flyway migration"
+5. **Cross-cutting concerns** — multi-tenancy, security, rate limiting, if plausibly relevant
+6. **Flow/lifecycle** — named flows ("user registration flow", "password reset flow")
+7. **Infrastructure** — gateway, messaging, Docker, Nginx — if the task touches them
+8. **Decision/ADR angle** — "why native SQL", "permissive auth model" for architecture questions
+9. **Stack-specific vocabulary** — "Flutter Clean Architecture", "Quarkus ConfigMapping"
 
-Run each query using the Bash tool with `qmd query`:
+Write queries in **English** (the wiki is in English, embeddings match better). Keep them 3–8 words, concrete nouns over verbs.
+
+### Step 3 — Execute queries and gather ranked files
+
+Run all queries **in parallel** via a single message with multiple Bash calls:
 
 ```bash
-qmd query "<your search query>" --files -n 8 --no-rerank
+qmd query "<variation>" --files -n 6 --no-rerank
 ```
 
-Use `--no-rerank` for speed. Use `--files` to get just file paths. Use `-n 8` to get enough candidates.
+- `--files` → file paths only
+- `-n 6` → top 6 per query (adjust 5–10 based on N and expected breadth)
+- `--no-rerank` → speed
 
-**Generate at least 3 queries, up to 6 queries** depending on the complexity of the task. Run them in parallel when possible.
+**After collecting results:**
 
-#### Deduplication
+1. Deduplicate file paths across all queries
+2. Weight by frequency — files that appear in multiple queries are higher signal
+3. Trim by filename relevance — if a filename obviously doesn't match the topic, drop it even if qmd ranked it
+4. Target final set: typically 5–15 pages. If you have >20 candidates, keep only those appearing in ≥2 queries or ranked high in ≥1
 
-Collect all unique file paths from all queries. Remove duplicates and remove any files that were already loaded in Step 1 (core patterns).
+### Step 4 — Read selected pages
 
-### Step 3 — Read discovered pages
+Read the final deduplicated set of wiki pages. Prefer reading them in parallel (multiple Read calls in one message).
 
-Read all unique wiki pages discovered by qmd that are relevant to the task. Use your judgment — if a result seems irrelevant based on its filename, skip it.
+If the task is purely exploratory and the user just asked a question, you may answer directly after reading. If the task is implementation, the loaded context stays in memory for the follow-up work.
 
-### Step 4 — Report what was loaded
+### Step 5 — Report
 
-After reading all files, provide a brief summary:
+Brief summary, in this format:
 
 ```
 Wiki context loaded via qmd:
-- Core patterns (6 pages): platform-overview, project-structure, code-patterns, configuration-patterns, database-patterns, multi-tenancy
-- Dynamic (N pages via qmd search):
-  - [list each page loaded with one-line description]
-- Queries used: [list the qmd queries you ran]
+- Queries ran (N): "<q1>", "<q2>", ...
+- Pages loaded (M): <page1>, <page2>, ...
+- Dropped as off-topic: <pageX> (optional, only if you filtered anything notable)
 ```
+
+Keep the report concise — the user cares that coverage was thorough, not verbose lists of every filename.
+
+## Principles
+
+- **qmd is the filter, not a hardcoded list.** Don't load "core" pages by path unless qmd ranks them relevant for this specific request.
+- **Coverage > minimalism.** A missed page causes bad suggestions later. Run one more query when in doubt.
+- **Parallelize aggressively.** All qmd queries in one message, all Read calls in one message.
+- **Filenames are a sanity check.** qmd ranks by embedding similarity, which isn't perfect — if a filename is clearly unrelated, skip it.
 
 ## Examples
 
-- `/load-wiki vou criar um novo endpoint de SMS no communication service`
-  - Core patterns loaded
-  - qmd queries: "communication service SMS", "SMS provider endpoint API curl", "service controller DTO pattern", "RabbitMQ messaging communication"
-  - Discovers: communication-service.md, sms-provider-config.md, email-provider-config.md (similar pattern), service-communication.md
+### Narrow question (N=3)
+`/load-wiki como o LoginBloc lida com erro de senha inválida?`
+- Queries: "login BLoC error handling", "login screen password validation", "frontend authentication error"
+- Loads: frontend-code-patterns, frontend-state-management, login.md (endpoint)
 
-- `/load-wiki preciso implementar o fluxo de pagamento no payment service`
-  - Core patterns loaded
-  - qmd queries: "payment service processing", "payment flow event-driven", "RabbitMQ payment events", "product catalog entitlements"
-  - Discovers: payment-service.md, payment-flow.md, service-communication.md, product-catalog-service.md
+### Feature implementation (N=6)
+`/load-wiki vou criar um endpoint de SMS no communication service`
+- Queries: "communication service SMS", "SMS provider configuration", "REST endpoint controller pattern", "multi-tenancy application_id", "RabbitMQ message producer", "rate limiting service"
+- Loads: communication-service, sms-provider-config, code-patterns, multi-tenancy, service-communication, configuration-patterns
 
-- `/load-wiki vou mexer na tela de login do frontend Flutter`
-  - Core patterns loaded
-  - qmd queries: "Flutter login screen authentication", "frontend navigation routing", "JWT token security OAuth2", "frontend state management"
-  - Discovers: frontend-monorepo.md, frontend-navigation.md, frontend-state-management.md, login.md, oauth2-token.md, jwt-security-model.md
+### Cross-service flow (N=9)
+`/load-wiki implementar fluxo completo de pagamento com Stripe`
+- Queries: "payment service Stripe gateway", "payment processing flow", "product catalog entitlements", "RabbitMQ payment events", "payment invoice transaction", "multi-tenancy payment", "encryption keys AES payment", "webhook signature verification", "database migration payment tables"
+- Loads: 10–12 pages across services/, flows/, data/, security/
 
-- `/load-wiki` (no arguments)
-  - Only core patterns loaded (no qmd queries needed)
+### Exploratory / architecture question (N=7)
+`/load-wiki como o frontend é organizado?`
+- Queries: "frontend Flutter monorepo structure", "Melos workspace packages", "Clean Architecture layers frontend", "frontend navigation routing", "BLoC state management frontend", "shared components kanasha_components", "frontend Docker deployment"
+- Loads: frontend-monorepo, frontend-project-structure, frontend-clean-architecture, frontend-navigation, frontend-state-management, frontend-code-patterns, frontend-docker-deployment
+
+### No arguments
+`/load-wiki`
+- Report: "No arguments given — pass a description of what you're going to work on so I can run targeted qmd queries."
