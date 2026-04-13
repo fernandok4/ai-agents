@@ -4,6 +4,7 @@ description: "Use this agent when you need to create test specifications, genera
 model: sonnet
 color: purple
 memory: project
+tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash
 ---
 
