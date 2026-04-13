@@ -4,6 +4,7 @@ description: "Use this agent when the user wants a quality review of code, wheth
 model: sonnet
 color: yellow
 memory: project
+tools: Read, Grep, Glob, Bash, Skill
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash
 ---
 
