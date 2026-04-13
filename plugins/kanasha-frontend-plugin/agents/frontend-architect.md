@@ -4,6 +4,7 @@ description: "Use this agent when the user requests a detailed technical specifi
 model: sonnet
 color: blue
 memory: project
+tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch, WebSearch
 allowed-tools: Read, Glob, Grep, Write, Edit
 ---
 
