@@ -4,6 +4,7 @@ description: "Use this agent when you need to perform end-to-end tests against a
 model: sonnet
 color: red
 memory: project
+tools: Read, Write, Grep, Glob, Bash, Skill, WebFetch
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
