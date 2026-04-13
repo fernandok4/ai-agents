@@ -4,6 +4,7 @@ description: "Use this agent when you need to create, review, or optimize databa
 model: sonnet
 color: orange
 memory: project
+tools: Read, Write, Edit, Grep, Glob, Bash, Skill
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash
 skills: db-query
 ---
