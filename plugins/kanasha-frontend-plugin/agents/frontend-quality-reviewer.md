@@ -4,6 +4,7 @@ description: "Use this agent when the user wants a quality review of frontend co
 model: sonnet
 color: yellow
 memory: project
+tools: Read, Grep, Glob, Bash, Skill
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash
 skills: frontend-quality-standards, severity-standards
 ---
