@@ -90,9 +90,8 @@ This plugin is available through the Claude Code plugin marketplace.
 1. **Reads wiki schema** — follows `wiki/CLAUDE.md` conventions (frontmatter, categories, naming)
 2. **Searches for related pages** — uses qmd to find pages for cross-referencing
 3. **Creates or updates the page** — with proper frontmatter, wikilinks, callouts, Mermaid diagrams
-4. **Updates index.md and log.md** — keeps the catalog and operation log current
-5. **Adds cross-references** — bidirectional wikilinks with related pages
-6. **Syncs qmd index** — runs `qmd update && qmd embed` so the content is immediately searchable
+4. **Adds cross-references** — bidirectional wikilinks with related pages
+5. **Syncs qmd index** — runs `qmd update && qmd embed` so the content is immediately searchable
 
 **Examples**:
 ```bash
