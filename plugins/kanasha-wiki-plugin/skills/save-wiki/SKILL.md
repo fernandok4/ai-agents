@@ -1,6 +1,6 @@
 ---
 name: save-wiki
-description: Save knowledge to the wiki following the schema conventions, then sync the qmd search index. Creates or updates pages with proper frontmatter, updates index.md and log.md, manages cross-references, and re-indexes qmd for semantic search.
+description: Save knowledge to the wiki following the schema conventions, then sync the qmd search index. Creates or updates pages with proper frontmatter, manages cross-references, and re-indexes qmd for semantic search.
 user-invocable: true
 argument-hint: "<description of what to save OR page name>"
 ---
@@ -27,13 +27,9 @@ Read the user's description to understand:
 
 If the description is vague, ask the user for clarification before proceeding.
 
-### Step 1 — Read the wiki schema and current state
+### Step 1 — Read the wiki schema
 
-Read these files to understand conventions and current state:
-
-1. `wiki/CLAUDE.md` — Schema, frontmatter format, conventions, content requirements
-2. `wiki/pages/index.md` — Current page catalog (to check for existing pages and find the right section)
-3. `wiki/pages/log.md` — Operation log (to append the new entry)
+Read `wiki/CLAUDE.md` to understand the schema, frontmatter format, conventions, and content requirements. Use qmd (`qmd query` / `qmd search`) to check whether a page already exists for the topic.
 
 ### Step 2 — Determine the page category and path
 
@@ -102,32 +98,14 @@ auth: "ROLE_NAME" | null
 - Use `> [!warning]`, `> [!note]`, `> [!tip]` callouts appropriately
 - Use `{{variableName}}` placeholders in curl commands
 
-### Step 5 — Update index.md
-
-Add the new page to the correct section in `wiki/pages/index.md`, following the existing format:
-
-```markdown
-- [[page-name]] — Short description
-```
-
-Place it in the right category section. If a new section is needed, create it following the existing structure.
-
-### Step 6 — Update cross-references
+### Step 5 — Update cross-references
 
 For each related page found in Step 3:
 1. Read the related page
 2. Add a `[[wikilink]]` to the new page where contextually appropriate
 3. Add the related page to the new page's `related:` frontmatter if not already there
 
-### Step 7 — Append to log.md
-
-Add a new entry to `wiki/pages/log.md`:
-
-```markdown
-| YYYY-MM-DD | ingest | Description of what was added/updated | page1, page2, page3 |
-```
-
-### Step 8 — Sync qmd index
+### Step 6 — Sync qmd index
 
 Run these commands to make the new content immediately searchable:
 
@@ -141,7 +119,7 @@ qmd embed
 
 This ensures `/load-wiki` can immediately find the new content via semantic search.
 
-### Step 9 — Report what was saved
+### Step 7 — Report what was saved
 
 Provide a summary:
 
@@ -151,26 +129,21 @@ Wiki updated:
 - Category: [category]
 - Cross-references added: [list of pages that now link to this one]
 - qmd index synced: [N] new/updated documents
-
-Log entry: | YYYY-MM-DD | ingest | description | pages |
 ```
 
 ## Examples
 
 - `/save-wiki new endpoint POST /v1/webhooks for payment service`
   - Creates `wiki/pages/endpoints/create-webhook.md` with full endpoint documentation
-  - Updates index.md under "Endpoints — Payment Service"
   - Cross-references payment-service.md
   - Syncs qmd
 
 - `/save-wiki architecture decision: we chose Redis over Memcached for SSE`
   - Creates `wiki/pages/decisions/redis-over-memcached.md` as ADR
-  - Updates index.md under "Decisions"
   - Cross-references realtime-service.md
   - Syncs qmd
 
 - `/save-wiki update authentication service with new MFA TOTP flow`
   - Updates existing `wiki/pages/services/authentication-service.md`
   - May create new flow page if complex enough
-  - Updates log.md
   - Syncs qmd
