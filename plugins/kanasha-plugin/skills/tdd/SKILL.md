@@ -1,21 +1,26 @@
 ---
 name: tdd
-description: TDD development workflow orchestrator. Runs software-architect → user approval → tech-team-architect plans TDD team → qa-engineer writes failing tests → backend-developer makes them pass → parallel code review → inline consolidation → fixes HIGH/CRITICAL. Use when starting a new feature with test-driven development.
+description: TDD development workflow orchestrator. Takes an approved plan/spec → qa-engineer writes failing tests → backend-developer makes them pass → parallel code review → inline consolidation → fixes HIGH/CRITICAL. Use when starting a new feature with test-driven development (plan the architecture first using Plan mode).
 user-invocable: true
-argument-hint: "<feature description>"
+argument-hint: "<feature description or path to spec.md>"
 ---
 
-Orchestrates a full TDD development lifecycle from feature description to reviewed, production-ready code.
+Orchestrates a TDD development lifecycle from an approved plan/spec to reviewed, production-ready code.
+
+## Prerequisites
+
+Before invoking `/tdd`, the architecture and design decisions must already be settled. Use Plan mode (or write a `spec.md` manually) to produce the plan that this skill will execute. This skill does **not** generate the spec — it executes against one that already exists.
 
 ## Usage
 
 ```
-/tdd <feature description>
+/tdd <feature description or path to spec.md>
 ```
 
-**Example**:
+**Examples**:
 ```
 /tdd Add a payment processing endpoint that charges a stored card and emits a payment.completed event
+/tdd ./spec.md
 ```
 
 ## Workflow
@@ -24,69 +29,24 @@ Execute the phases in strict order. Do not skip phases. Do not proceed to the ne
 
 ---
 
-### Phase 1 — Architecture: Generate Specification
+### Phase 1 — Confirm the Plan
 
-Launch the `software-architect` agent to analyze the feature description and produce `spec.md`.
+Establish the plan that will drive the TDD cycle.
 
-**Agent**: `software-architect`
-**Input**: The user's feature description (the argument passed to `/tdd`)
-**Output**: `spec.md` in the current directory
-**Run**: Foreground (wait for completion)
+- If the argument is a path to an existing spec file (e.g., `./spec.md`), read it and summarize it to the user.
+- If the argument is a feature description and no `spec.md` exists in the current directory, ask the user to either (a) provide a `spec.md`, or (b) run Plan mode first and return, or (c) confirm that the description itself is detailed enough to drive tests.
+- If a `spec.md` already exists in the current directory, confirm with the user whether to use it.
 
-After the agent completes, tell the user:
-
-```
-spec.md has been generated. Please review it carefully before the team is assembled.
-
-Key questions to consider:
-- Are all requirements captured correctly?
-- Are the implementation phases in the right order?
-- Are there any NEEDS CLARIFICATION items that need your input?
-
-Reply with:
-- "approved" to proceed
-- Feedback to request changes (the software-architect will revise)
-```
-
-Wait for the user's response.
-
-- If the user says **"approved"** (or equivalent) → proceed to Phase 2
-- If the user provides **feedback** → re-launch `software-architect` with the feedback appended to the original request, then present the revised `spec.md` for approval again
-- Repeat until explicit approval is received
+Do not proceed until the plan is confirmed.
 
 ---
 
-### Phase 2 — Team Planning: Design the TDD Team
+### Phase 2 — TDD Red Phase: Write Failing Tests
 
-Launch the `tech-team-architect` agent to read `spec.md` and produce `team-plan.md`.
-
-**Agent**: `tech-team-architect`
-**Input prompt**: "Read `spec.md` and design a team to deliver this feature using TDD (Test-Driven Development). Define the team composition, execution order, responsibilities, and deliverables for each member. Write the result to `team-plan.md`."
-**Output**: `team-plan.md`
-**Run**: Foreground (wait for completion)
-
-After the agent completes, read `team-plan.md` in full. This file is now the authoritative source for all remaining phases.
-
-Present the team plan to the user:
-
-```
-Team assembled for TDD delivery. Here's the plan:
-
-[Display the team members and execution order from team-plan.md]
-
-Proceeding with the team plan.
-```
-
-No approval is needed for the team plan. Proceed immediately.
-
----
-
-### Phase 3 — TDD Red Phase: Write Failing Tests
-
-Launch the `qa-engineer` agent to write failing test code based on `spec.md`.
+Launch the `qa-engineer` agent to write failing test code based on the confirmed plan.
 
 **Agent**: `qa-engineer`
-**Input prompt**: "Read `spec.md` and write failing test code (red phase of TDD). Write actual executable test files — not just specifications or lists. Each test should fail because the production code doesn't exist yet. Create minimal stubs (throwing `NotImplementedError` or equivalent) for any production classes referenced in tests. Follow the project's existing test patterns and conventions. Organize tests by category: happy path, validation, business rules, edge cases, security, multi-tenancy."
+**Input prompt**: "Read the confirmed plan (spec.md or the feature description provided) and write failing test code (red phase of TDD). Write actual executable test files — not just specifications or lists. Each test should fail because the production code doesn't exist yet. Create minimal stubs (throwing `NotImplementedError` or equivalent) for any production classes referenced in tests. Follow the project's existing test patterns and conventions. Organize tests by category: happy path, validation, business rules, edge cases, security, multi-tenancy."
 **Output**: Test files in the project's test directory
 **Run**: Foreground (wait for completion)
 
@@ -99,24 +59,24 @@ All tests should be failing (red). Proceeding to green phase.
 
 ---
 
-### Phase 4 — TDD Green Phase: Make Tests Pass
+### Phase 3 — TDD Green Phase: Make Tests Pass
 
 Launch the `backend-developer` agent to implement production code that makes the failing tests pass.
 
 **Agent**: `backend-developer`
-**Input prompt**: "Failing TDD tests have been written. Read `spec.md` for context. Implement the minimum production code needed to make ALL failing tests pass (green phase). Follow the red-green-refactor cycle: make each test pass, then refactor if needed. Do NOT modify the test files. Run tests after implementation to verify they pass."
+**Input prompt**: "Failing TDD tests have been written. Read the confirmed plan for context. Implement the minimum production code needed to make ALL failing tests pass (green phase). Follow the red-green-refactor cycle: make each test pass, then refactor if needed. Do NOT modify the test files. Run tests after implementation to verify they pass."
 **Output**: Production code files
 **Run**: Foreground (wait for completion)
 
-**Additional agents**: If `team-plan.md` specifies extra agents for this phase (e.g., `database-specialist` for migrations), launch them before or alongside `backend-developer` as indicated by the team plan.
+**Additional agents**: If the plan calls for database work, launch `database-specialist` before or alongside `backend-developer` for migrations/schema. If the plan calls for frontend work, launch `frontend-developer` (from the frontend plugin) instead of or alongside `backend-developer`.
 
 After the agent completes:
-- If all tests pass → proceed to Phase 5
-- If some tests still fail → present the failures to the user and ask how to proceed (retry, adjust spec, or skip)
+- If all tests pass → proceed to Phase 4
+- If some tests still fail → present the failures to the user and ask how to proceed (retry, adjust plan, or skip)
 
 ---
 
-### Phase 5 — Code Review: Run Specialist Reviewers
+### Phase 4 — Code Review: Run Specialist Reviewers
 
 Launch all 3 specialist reviewers in parallel:
 
@@ -128,7 +88,7 @@ Launch all 3 specialist reviewers in parallel:
 
 ---
 
-### Phase 6 — Consolidation: Inline Review Verdict
+### Phase 5 — Consolidation: Inline Review Verdict
 
 After all 3 reviewers finish, read `quality-review.md`, `security-review.md`, and `performance-review.md`.
 
@@ -163,7 +123,7 @@ No blocking issues found. Feature is ready.
 
 ---
 
-### Phase 7 — Fix Phase (if HIGH/CRITICAL exist)
+### Phase 6 — Fix Phase (if HIGH/CRITICAL exist)
 
 If the verdict is CONDITIONAL GO or NO-GO:
 
@@ -173,7 +133,7 @@ Launch the `backend-developer` agent to fix all HIGH and CRITICAL findings.
 **Input prompt**: "Read quality-review.md, security-review.md, and performance-review.md. Fix every HIGH and CRITICAL finding. Do not fix MEDIUM or LOW findings. HIGH and CRITICAL fixes are mandatory — no exceptions."
 **Run**: Foreground (wait for completion)
 
-After fixes, re-run Phase 5 (all 3 reviewers in parallel) and Phase 6 (inline consolidation).
+After fixes, re-run Phase 4 (all 3 reviewers in parallel) and Phase 5 (inline consolidation).
 
 - If no HIGH/CRITICAL remain → proceed to Completion Summary
 - If issues persist → run fix phase again (max 2 iterations total)
@@ -213,18 +173,16 @@ Next steps:
 
 | Situation | Action |
 |-----------|--------|
-| `software-architect` fails to produce `spec.md` | Report the error to the user. Do not proceed |
-| User rejects spec more than 3 times | Ask the user if they want to provide a more detailed description or a manual spec |
-| `tech-team-architect` fails to produce `team-plan.md` | Report the error. Ask the user: retry, or proceed with the default team (qa-engineer → backend-developer → 3 reviewers). Never silently fall back — the user decides |
+| No plan/spec available at Phase 1 | Ask the user to run Plan mode first or supply a `spec.md`. Do not proceed |
 | `qa-engineer` fails to write test code | Report error. Green phase cannot start without failing tests |
-| `backend-developer` reports still-failing tests | Present the specific failing tests to the user. Ask: retry, skip, or adjust spec |
+| `backend-developer` reports still-failing tests | Present the specific failing tests to the user. Ask: retry, skip, or adjust plan |
 | A reviewer fails to produce its output file | Note the missing review, consolidate with what's available, flag the gap |
-| Phase 7 exceeds 2 iterations | Present remaining HIGH/CRITICAL issues to the user with options: fix manually, accept risk, update spec |
+| Phase 6 exceeds 2 iterations | Present remaining HIGH/CRITICAL issues to the user with options: fix manually, accept risk, update plan |
 
 ## Important Notes
 
-- **Spec approval is mandatory** — never skip it. The spec is the contract for the entire team
-- **`team-plan.md` guides execution** — follow the team architect's recommended order and roles. If extra agents were added, launch them at the specified position
+- **Architecture and team composition are upstream of this skill.** Use Plan mode (or write a `spec.md` manually) before invoking `/tdd`. This skill does not design the system — it executes the TDD cycle against an existing plan
+- **Default execution team**: `qa-engineer` → `backend-developer` → three reviewers in parallel. Add `database-specialist` or `frontend-developer` only when the plan explicitly requires them
 - **Tests must be red before implementation starts** — if qa-engineer reports tests that already pass, flag this to the user
 - **HIGH and CRITICAL are always fixed** — there are no exceptions in the fix phase
 - **MEDIUM and LOW are never auto-fixed** — they are reported to the user as optional improvements
