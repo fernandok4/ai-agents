@@ -12,7 +12,6 @@ A collection of specialized AI agents and skills designed to enhance your develo
   - [Development Workflow](#development-workflow)
   - [Background Skills](#background-skills)
 - [Agents](#agents)
-  - [Architecture & Planning](#architecture--planning)
   - [Implementation](#implementation)
   - [Testing](#testing)
   - [Review Specialists](#review-specialists)
@@ -33,20 +32,20 @@ This plugin is available through the Claude Code plugin system. Add it to your C
 ### Full TDD Workflow (recommended for new features)
 
 ```bash
-# One command — spec, team assembly, TDD red-green-refactor, review, and fixes
+# 1. Use Plan mode to design the feature and produce a plan/spec
+# 2. Run TDD against the approved plan — red-green, review, and fixes
 /tdd Add a payment processing endpoint that charges a stored card
 ```
 
 ### Manual Step-by-Step
 
 ```bash
-# 1. Create a detailed implementation spec
-# (Claude delegates to the software-architect agent)
-Create an implementation spec for user authentication with JWT
+# 1. Use Plan mode to design the implementation
+# (Claude Code's built-in Plan mode replaces any architect agent)
 
-# 2. Implement the specification
+# 2. Implement the plan
 # (Claude delegates to the backend-developer agent)
-Implement the spec
+Implement the plan
 
 # 3. Review the code before committing
 /project-review
@@ -63,21 +62,23 @@ Skills are invoked manually with `/skill-name`. They provide structured workflow
 
 ### Development Workflow
 
-#### `/tdd <feature description>`
+#### `/tdd <feature description or path to spec.md>`
 
-**Purpose**: Full TDD development lifecycle from feature description to reviewed, production-ready code.
+**Purpose**: TDD development lifecycle from an approved plan to reviewed, production-ready code.
+
+**Prerequisite**: Architecture and design decisions must already be settled — use Plan mode (or write a `spec.md` manually) before invoking this skill.
 
 **What it does**:
-1. Runs `software-architect` to generate `spec.md` — **waits for your approval**
-2. Runs `tech-team-architect` to design the TDD team → `team-plan.md`
-3. Executes the team plan (typically: `qa-engineer` writes failing tests, `backend-developer` makes them pass)
+1. Confirms the plan (from a `spec.md` or a detailed feature description)
+2. Runs `qa-engineer` to write failing tests (red phase)
+3. Runs `backend-developer` to make them pass (green phase) — adds `database-specialist` or `frontend-developer` when the plan requires it
 4. Runs specialist reviewers in parallel
 5. Consolidates review findings inline with a deployment verdict
 6. Fixes all HIGH and CRITICAL findings, then re-reviews
 
 **Key guarantees**:
-- Spec is always approved by you before any code is written
-- Team composition is decided by `tech-team-architect`, not hardcoded
+- Architecture is decided upstream by you (Plan mode or manual spec) — this skill executes, it does not design
+- Default team is `qa-engineer` → `backend-developer` → three reviewers; extra roles are added only when the plan calls for them
 - HIGH and CRITICAL review issues are always fixed before the workflow ends
 - Review consolidation is inline — no separate overall-reviewer agent
 
@@ -171,8 +172,8 @@ Background skills (`user-invocable: false`) are not invoked directly. They are a
 
 | Skill | Used By | Purpose |
 |-------|---------|---------|
-| `quality-standards` | software-architect, quality-reviewer | Function size, complexity, duplication, test coverage, over-engineering thresholds |
-| `performance-standards` | software-architect, performance-reviewer | Scale assumptions, algorithm complexity, database, caching, resource usage, concurrency |
+| `quality-standards` | quality-reviewer | Function size, complexity, duplication, test coverage, over-engineering thresholds |
+| `performance-standards` | performance-reviewer | Scale assumptions, algorithm complexity, database, caching, resource usage, concurrency |
 | `security-standards` | security-reviewer | OWASP Top 10 checklist, secrets detection patterns, security severity definitions |
 | `severity-standards` | quality-reviewer, performance-reviewer, security-reviewer | Unified CRITICAL/HIGH/MEDIUM/LOW severity definitions |
 
@@ -184,28 +185,7 @@ Agents are specialized, independent AI assistants. Each runs in its own context 
 
 ### Architecture & Planning
 
-#### Software Architect
-
-**Use when**: You need a detailed implementation specification or design.
-
-**What it produces**: `spec.md` containing:
-- Executive summary
-- Files to create/modify with exact paths
-- Classes and methods with signatures
-- Performance and scalability considerations
-- Implementation order and phases
-- Testing strategy
-
----
-
-#### Tech Team Architect
-
-**Use when**: You have a task or spec and need to plan team composition, roles, and execution order.
-
-**What it produces**: `team-plan.md` containing:
-- Team member roles with responsibilities and deliverables
-- Execution order with dependency graph
-- Risk register and production readiness checklist
+Architecture, design, and team composition are handled outside this plugin using Claude Code's built-in **Plan mode**. Produce a `spec.md` (or equivalent plan) first, then invoke `/tdd` or launch `backend-developer` directly against it.
 
 ---
 
@@ -294,21 +274,21 @@ In the `/tdd` workflow, the QA Engineer writes the actual failing test code (red
 ### New Feature — Full TDD Workflow
 
 ```bash
-# One command does everything:
-# software-architect → approval → tech-team-architect → team execution → review → fix
+# 1. Use Plan mode to design the feature
+# 2. Run /tdd against the approved plan:
+#    plan confirmation → qa-engineer (red) → backend-developer (green) → review → fix
 /tdd Add a product catalogue endpoint with price variants and entitlement checks
 ```
 
 ### New Feature — Manual Step-by-Step
 
 ```bash
-# 1. Create detailed specification
-# (Claude delegates to software-architect)
-Create a spec for rate limiting on API endpoints
+# 1. Use Plan mode to design the implementation
+# (Claude Code's built-in Plan mode — no dedicated agent)
 
-# 2. Implement the feature
+# 2. Implement the plan
 # (Claude delegates to backend-developer)
-Implement the spec
+Implement the plan
 
 # 3. Run comprehensive review
 /project-review
@@ -332,8 +312,6 @@ Implement the spec
 ai-agents/
 ├── agents/              # Subagent configurations (isolated context, heavy workflows)
 │   ├── backend-developer.md     # Stack-agnostic backend implementer + TDD green phase
-│   ├── software-architect.md    # Produces spec.md
-│   ├── tech-team-architect.md   # Team composition strategist → team-plan.md
 │   ├── qa-engineer.md           # TDD test writer + test planning + system testing
 │   ├── e2e-test-runner.md       # End-to-end API test runner
 │   ├── database-specialist.md   # Schema, migrations, query optimization
