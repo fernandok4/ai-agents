@@ -1,6 +1,6 @@
 ---
 name: frontend-performance-standards
-description: Shared frontend performance, scalability, and optimization criteria used by frontend-architect and frontend-performance-reviewer agents.
+description: Shared frontend performance, scalability, and optimization criteria used by the frontend-performance-reviewer agent.
 user-invocable: false
 ---
 
