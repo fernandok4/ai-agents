@@ -1,6 +1,6 @@
 ---
 name: frontend-quality-standards
-description: Shared frontend code quality thresholds and criteria used by frontend-architect and frontend-quality-reviewer agents.
+description: Shared frontend code quality thresholds and criteria used by the frontend-quality-reviewer agent.
 user-invocable: false
 ---
 
