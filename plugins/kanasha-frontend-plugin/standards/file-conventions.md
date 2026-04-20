@@ -4,7 +4,6 @@
 
 | Agent | Output | Location |
 |-------|--------|----------|
-| frontend-architect | `spec.md` | Current directory |
 | frontend-developer | (code files) | As specified by user/spec |
 | frontend-qa-engineer | (test files) | Project test directory |
 | frontend-quality-reviewer | `quality-review.md` | Current directory |
