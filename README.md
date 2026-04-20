@@ -10,7 +10,9 @@ A marketplace of specialized AI agent plugins for Claude Code, providing powerfu
 
 Backend-focused agents and skills for architecture, TDD implementation, code review, and database operations.
 
-**Agents**: software-architect, tech-team-architect, backend-developer, database-specialist, qa-engineer, e2e-test-runner, quality-reviewer, security-reviewer, performance-reviewer
+**Agents**: backend-developer, database-specialist, qa-engineer, e2e-test-runner, quality-reviewer, security-reviewer, performance-reviewer
+
+Architecture and team composition are handled via Claude Code's built-in Plan mode — no dedicated architect agent.
 
 **Skills**: `/tdd`, `/project-review`, `/deep-web-search`, `/semantic-commit`, `/db-query`
 
@@ -22,7 +24,9 @@ Backend-focused agents and skills for architecture, TDD implementation, code rev
 
 Frontend-focused agents and skills for UI architecture, component implementation, testing, accessibility auditing, and code review. Stack-agnostic — works with React, Vue, Angular, Svelte, or any frontend framework.
 
-**Agents**: frontend-architect, frontend-developer, frontend-qa-engineer, frontend-quality-reviewer, frontend-security-reviewer, frontend-performance-reviewer, accessibility-reviewer
+**Agents**: frontend-developer, frontend-qa-engineer, frontend-quality-reviewer, frontend-security-reviewer, frontend-performance-reviewer, accessibility-reviewer
+
+Architecture and design decisions are handled via Claude Code's built-in Plan mode — no dedicated architect agent.
 
 [Full documentation](plugins/kanasha-frontend-plugin/README.md)
 
