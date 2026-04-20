@@ -10,7 +10,6 @@ A collection of specialized AI agents designed to enhance frontend development w
 
 - [Installation](#installation)
 - [Agents](#agents)
-  - [Architecture & Planning](#architecture--planning)
   - [Implementation](#implementation)
   - [Testing](#testing)
   - [Review Specialists](#review-specialists)
@@ -33,20 +32,7 @@ Agents are specialized, independent AI assistants. Each runs in its own context 
 
 ### Architecture & Planning
 
-#### Frontend Architect
-
-**Use when**: You need a detailed implementation specification for a UI feature, page, or component system.
-
-**What it produces**: `spec.md` containing:
-- Executive summary and user interactions
-- Component architecture with props interfaces and hierarchy
-- State management strategy
-- API integration and data flow
-- Routing and navigation
-- Styling and responsive design
-- Accessibility specification
-- Performance considerations
-- Implementation phases and testing strategy
+Architecture and design decisions are handled outside this plugin using Claude Code's built-in **Plan mode**. Produce a `spec.md` (or equivalent plan) first, then launch `frontend-developer` directly against it.
 
 ---
 
@@ -130,8 +116,8 @@ Background skills (`user-invocable: false`) are auto-injected into agents via th
 | Skill | Used By | Purpose |
 |-------|---------|---------|
 | `severity-standards` | All reviewers | Unified CRITICAL/HIGH/MEDIUM/LOW severity definitions |
-| `frontend-quality-standards` | frontend-architect, frontend-quality-reviewer | Component size, complexity, duplication, test coverage, over-engineering thresholds |
-| `frontend-performance-standards` | frontend-architect, frontend-performance-reviewer | Web Vitals targets, bundle budgets, rendering, data fetching, memory |
+| `frontend-quality-standards` | frontend-quality-reviewer | Component size, complexity, duplication, test coverage, over-engineering thresholds |
+| `frontend-performance-standards` | frontend-performance-reviewer | Web Vitals targets, bundle budgets, rendering, data fetching, memory |
 | `frontend-security-standards` | frontend-security-reviewer | Client-side OWASP checklist, XSS patterns, secrets detection |
 
 ---
@@ -141,13 +127,12 @@ Background skills (`user-invocable: false`) are auto-injected into agents via th
 ### New Feature — Manual Step-by-Step
 
 ```bash
-# 1. Create detailed specification
-# (Claude delegates to frontend-architect)
-Create a spec for a dashboard with real-time charts and filters
+# 1. Use Plan mode to design the UI feature
+# (Claude Code's built-in Plan mode — no dedicated agent)
 
-# 2. Implement the feature
+# 2. Implement the plan
 # (Claude delegates to frontend-developer)
-Implement the spec
+Implement the plan
 
 # 3. Run comprehensive review (all 4 specialists)
 # (manually launch the 4 reviewers in parallel)
@@ -179,7 +164,6 @@ Review the checkout page components for accessibility
 frontend/
 ├── agents/
 │   ├── frontend-developer.md       # Stack-agnostic UI implementer + TDD green phase
-│   ├── frontend-architect.md       # Produces spec.md for UI features
 │   ├── frontend-qa-engineer.md     # Test writer + test planning
 │   ├── frontend-quality-reviewer.md    # → quality-review.md
 │   ├── frontend-security-reviewer.md   # → security-review.md
