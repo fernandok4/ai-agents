@@ -1,6 +1,6 @@
 ---
 name: performance-standards
-description: Shared performance, scalability, and optimization criteria used by software-architect and performance-reviewer agents.
+description: Shared performance, scalability, and optimization criteria used by the performance-reviewer agent.
 user-invocable: false
 ---
 
