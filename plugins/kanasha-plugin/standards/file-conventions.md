@@ -4,8 +4,6 @@
 
 | Agent | Output | Location |
 |-------|--------|----------|
-| software-architect | `spec.md` | Current directory |
-| tech-team-architect | `team-plan.md` | Current directory |
 | backend-developer | (code files) | As specified by user/spec |
 | qa-engineer | (test files) | Project test directory |
 | database-specialist | (migrations, schema) | As specified by project |
