@@ -1,6 +1,6 @@
 ---
 name: quality-standards
-description: Shared code quality thresholds and criteria used by software-architect and quality-reviewer agents.
+description: Shared code quality thresholds and criteria used by the quality-reviewer agent.
 user-invocable: false
 ---
 
