@@ -1,0 +1,32 @@
+{
+  "name": "kanasha-wiki-plugin",
+  "version": "0.1.0",
+  "description": "Wiki workflow skills for loading indexed knowledge context and saving durable project knowledge.",
+  "author": {
+    "name": "Fernando Kanashiro"
+  },
+  "repository": "https://github.com/fernandok4/ai-agents",
+  "keywords": [
+    "wiki",
+    "knowledge",
+    "documentation",
+    "qmd"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Kanasha Wiki",
+    "shortDescription": "Wiki load and save workflows",
+    "longDescription": "Reusable skills for loading indexed wiki context and saving project knowledge using the existing qmd-based wiki workflow.",
+    "developerName": "Fernando Kanashiro",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/fernandok4/ai-agents",
+    "defaultPrompt": [
+      "Use Kanasha Wiki to load context about this topic.",
+      "Use Kanasha Wiki to save this project knowledge."
+    ]
+  }
+}

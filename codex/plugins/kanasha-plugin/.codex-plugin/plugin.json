@@ -1,0 +1,34 @@
+{
+  "name": "kanasha-plugin",
+  "version": "0.1.0",
+  "description": "Backend-focused development skills for architecture execution, TDD, code review, database queries, research, and semantic commits.",
+  "author": {
+    "name": "Fernando Kanashiro"
+  },
+  "repository": "https://github.com/fernandok4/ai-agents",
+  "keywords": [
+    "backend",
+    "tdd",
+    "code-review",
+    "database",
+    "development"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Kanasha Backend",
+    "shortDescription": "Backend development and review skills",
+    "longDescription": "Backend-focused reusable skills for TDD implementation, project review, database inspection, research, and semantic commits.",
+    "developerName": "Fernando Kanashiro",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/fernandok4/ai-agents",
+    "defaultPrompt": [
+      "Use Kanasha Backend to run a project review.",
+      "Use Kanasha Backend to guide a TDD implementation from an approved spec.",
+      "Use Kanasha Backend to create semantic commits for the current changes."
+    ]
+  }
+}

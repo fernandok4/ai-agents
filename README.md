@@ -1,6 +1,6 @@
-# Kanasha Marketplace for Claude Code
+# Kanasha Marketplace for Claude Code and Codex
 
-A marketplace of specialized AI agent plugins for Claude Code, providing powerful tools for architecture, TDD, code review, accessibility auditing, and more.
+A marketplace of specialized AI agent plugins and skills for Claude Code and Codex, providing tools for TDD, code review, accessibility auditing, wiki workflows, and more.
 
 ---
 
@@ -34,9 +34,33 @@ Architecture and design decisions are handled via Claude Code's built-in Plan mo
 
 ## Installation
 
-These plugins are available through the Claude Code plugin system. Add the marketplace and enable the plugins you need.
+These plugins are available through the Claude Code plugin system and through Codex local marketplace metadata.
 
 **Source**: [github.com/fernandok4/ai-agents](https://github.com/fernandok4/ai-agents)
+
+### Claude Code
+
+Claude Code reads the existing `.claude-plugin/marketplace.json` file.
+
+### Codex
+
+Codex reads the repo marketplace at `.agents/plugins/marketplace.json`. The marketplace points to Codex-specific plugin folders under `codex/plugins/`, and each plugin includes a required `.codex-plugin/plugin.json` manifest that points to its bundled `skills/` directory.
+
+Open Codex in this repository and use `/plugins` to inspect and install the local entries:
+
+```bash
+codex
+/plugins
+```
+
+After installing a plugin, start a new Codex thread and invoke a bundled skill explicitly with `$skill-name`, or describe the task and let Codex choose a matching skill from its description.
+
+### Codex compatibility notes
+
+- Codex `skills/*/SKILL.md` files are copied into `codex/plugins/*` with Codex-compatible frontmatter.
+- Claude Code keeps using the original `plugins/*` tree, including Claude-specific frontmatter such as `user-invocable` and `argument-hint`.
+- Existing Claude `agents/*.md` files are not automatically Codex custom agents. Codex custom agents use standalone TOML files under `.codex/agents/` or `~/.codex/agents/`, so converting the Claude agents is a separate follow-up.
+- The Codex tree avoids globally duplicated skill names where practical, for example by using separate backend and frontend severity standards.
 
 ---
 

@@ -1,0 +1,34 @@
+{
+  "name": "kanasha-frontend-plugin",
+  "version": "0.1.0",
+  "description": "Frontend-focused development and review skills for quality, security, performance, accessibility, and UI implementation standards.",
+  "author": {
+    "name": "Fernando Kanashiro"
+  },
+  "repository": "https://github.com/fernandok4/ai-agents",
+  "keywords": [
+    "frontend",
+    "accessibility",
+    "performance",
+    "security",
+    "code-review"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Kanasha Frontend",
+    "shortDescription": "Frontend review and implementation standards",
+    "longDescription": "Frontend-focused reusable skills and standards for UI quality, security, performance, accessibility, and implementation review.",
+    "developerName": "Fernando Kanashiro",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/fernandok4/ai-agents",
+    "defaultPrompt": [
+      "Use Kanasha Frontend to review this UI change.",
+      "Use Kanasha Frontend standards while implementing this component.",
+      "Use Kanasha Frontend to check accessibility, performance, and security risks."
+    ]
+  }
+}
