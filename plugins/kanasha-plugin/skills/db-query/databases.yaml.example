@@ -1,0 +1,19 @@
+# Exemplo fictício. Copie-o somente para a configuração privada administrada no host.
+databases:
+  example_postgres:
+    enabled: true
+    type: postgresql
+    host: postgres.example.invalid
+    port: 5432
+    database: example_database
+    username: db_query_reader
+    password: change-this-private-value
+    description: "Consulta de exemplo sem dados sensíveis."
+    connect_timeout_seconds: 5
+    statement_timeout_ms: 10000
+    max_rows: 100
+    allowed_schemas:
+      - public
+    allowed_relations:
+      - public.example_safe_view
+    allowed_functions: []

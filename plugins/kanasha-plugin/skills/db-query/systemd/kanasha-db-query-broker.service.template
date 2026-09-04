@@ -1,0 +1,25 @@
+[Unit]
+Description=PostgreSQL read-only query broker
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=@BROKER_USER@
+Group=@BROKER_USER@
+SupplementaryGroups=@SOCKET_GROUP@
+ExecStart=@PYTHON_BIN@ @INSTALL_ROOT@/db_query_broker.py --config @CONFIG_PATH@ --socket @SOCKET_PATH@ --socket-group @SOCKET_GROUP@
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+RestartSec=2s
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=@RUNTIME_DIRECTORY@
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+RuntimeDirectory=@RUNTIME_DIRECTORY_NAME@
+RuntimeDirectoryMode=0711
+
+[Install]
+WantedBy=multi-user.target
